@@ -1,32 +1,34 @@
 # ⬡ NexChat — Real-Time Chat Application
 
+Live real-time messaging system with scalable backend and WebSocket-based communication.
+
 A production-ready real-time chat application built with the **MERN stack** and **WebSockets**, supporting concurrent users with instant bidirectional messaging.
 
 ---
 
 ## 🚀 Features
 
-- **Real-Time Messaging** — Instant bidirectional communication via WebSockets (ws library)
-- **JWT Authentication** — Secure login/register with token-based session handling
-- **Multiple Chat Rooms** — Create and join public channels
-- **Typing Indicators** — Live "user is typing..." feedback
-- **Message Pagination** — Infinite scroll with indexed MongoDB queries (30% faster retrieval)
-- **Online Presence** — Real-time user status (online/offline/away)
-- **Concurrent Connections** — Event-driven Node.js handles multiple users per session (multi-tab support)
-- **Persistent Storage** — All messages saved to MongoDB with compound indexes
+* **Real-Time Messaging** — Instant bidirectional communication via WebSockets (ws library)
+* **JWT Authentication** — Secure login/register with token-based session handling
+* **Multiple Chat Rooms** — Create and join public channels
+* **Typing Indicators** — Live "user is typing..." feedback
+* **Message Pagination** — Infinite scroll with indexed MongoDB queries (30% faster retrieval)
+* **Online Presence** — Real-time user status (online/offline/away)
+* **Concurrent Connections** — Event-driven Node.js handles multiple users per session (multi-tab support)
+* **Persistent Storage** — All messages saved to MongoDB with compound indexes
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer      | Technology                          |
-|------------|-------------------------------------|
-| Frontend   | React.js 18, React Router v6, CSS Modules |
-| Backend    | Node.js, Express.js                 |
-| Database   | MongoDB + Mongoose                  |
-| Real-Time  | WebSockets (ws library)             |
-| Auth       | JWT (jsonwebtoken) + bcryptjs       |
-| HTTP Client| Axios                               |
+| Layer       | Technology                                |
+| ----------- | ----------------------------------------- |
+| Frontend    | React.js 18, React Router v6, CSS Modules |
+| Backend     | Node.js, Express.js                       |
+| Database    | MongoDB Atlas + Mongoose                  |
+| Real-Time   | WebSockets (ws library)                   |
+| Auth        | JWT (jsonwebtoken) + bcryptjs             |
+| HTTP Client | Axios                                     |
 
 ---
 
@@ -36,48 +38,36 @@ A production-ready real-time chat application built with the **MERN stack** and 
 nexchat/
 ├── server/
 │   ├── config/
-│   │   └── db.js              # MongoDB connection
+│   │   └── db.js
 │   ├── middleware/
-│   │   └── auth.js            # JWT protect + WS token verify
+│   │   └── auth.js
 │   ├── models/
-│   │   ├── User.js            # User schema with bcrypt
-│   │   ├── Message.js         # Message schema with indexes
-│   │   └── Room.js            # Room schema
+│   │   ├── User.js
+│   │   ├── Message.js
+│   │   └── Room.js
 │   ├── routes/
-│   │   ├── auth.js            # Register / Login / Logout / Me
-│   │   ├── messages.js        # Paginated message retrieval
-│   │   ├── rooms.js           # Room CRUD
-│   │   └── users.js           # User listing
-│   ├── websocket.js           # WebSocket server (event-driven)
-│   ├── index.js               # Express server entry point
-│   ├── .env                   # Environment variables
+│   │   ├── auth.js
+│   │   ├── messages.js
+│   │   ├── rooms.js
+│   │   └── users.js
+│   ├── websocket.js
+│   ├── index.js
+│   ├── .env.example
 │   └── package.json
 │
 ├── client/
 │   ├── public/
-│   │   └── index.html
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Sidebar.js     # Rooms + Users panel
-│   │   │   ├── ChatWindow.js  # Message display + input
-│   │   │   └── PrivateRoute.js
 │   │   ├── context/
-│   │   │   ├── AuthContext.js # Global auth state
-│   │   │   └── WSContext.js   # WebSocket provider
 │   │   ├── hooks/
-│   │   │   └── useMessages.js # Message state + WS events
 │   │   ├── pages/
-│   │   │   ├── Login.js
-│   │   │   ├── Register.js
-│   │   │   └── Chat.js
 │   │   ├── utils/
-│   │   │   └── api.js         # Axios instance with interceptors
 │   │   ├── App.js
 │   │   └── index.css
-│   ├── .env
 │   └── package.json
 │
-├── package.json               # Root scripts (concurrently)
+├── package.json
 └── README.md
 ```
 
@@ -87,74 +77,69 @@ nexchat/
 
 ### Prerequisites
 
-- **Node.js** v16+
-- **MongoDB** running locally on port 27017 (or update MONGODB_URI)
-- **npm** v8+
+* **Node.js** v16+
+* **MongoDB Atlas account**
+* **npm** v8+
+
+---
 
 ### 1. Install Dependencies
 
 ```bash
-# From project root
 npm run install:all
 ```
 
 Or manually:
+
 ```bash
 npm install
 cd server && npm install
 cd ../client && npm install
 ```
 
+---
+
 ### 2. Configure Environment
 
-**server/.env** (already set up, update as needed):
+Create `server/.env`:
+
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/chatapp
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_super_secret_jwt_key
 JWT_EXPIRE=7d
 CLIENT_URL=http://localhost:3000
 ```
 
-**client/.env** (already set up):
+Create `client/.env`:
+
 ```env
 REACT_APP_API_URL=http://localhost:5000/api
 REACT_APP_WS_URL=ws://localhost:5000/ws
 ```
 
-### 3. Start MongoDB
+---
+
+### 3. Run the App
 
 ```bash
-# macOS/Linux
-mongod
-
-# Windows
-"C:\Program Files\MongoDB\Server\<version>\bin\mongod.exe"
-
-# Or with brew
-brew services start mongodb-community
-```
-
-### 4. Run the App
-
-```bash
-# From root — starts both server and client concurrently
 npm run dev
 ```
 
 Or separately:
-```bash
-# Terminal 1
-cd server && npm run dev
 
-# Terminal 2
+```bash
+cd server && npm run dev
 cd client && npm start
 ```
 
-- **Client**: http://localhost:3000
-- **Server**: http://localhost:5000
-- **WebSocket**: ws://localhost:5000/ws
-- **Health Check**: http://localhost:5000/health
+---
+
+## 🌐 Application URLs
+
+* Frontend: http://localhost:3000
+* Backend: http://localhost:5000
+* WebSocket: ws://localhost:5000/ws
 
 ---
 
@@ -162,104 +147,77 @@ cd client && npm start
 
 ### Client → Server
 
-| Event          | Payload                              | Description              |
-|----------------|--------------------------------------|--------------------------|
-| `join_room`    | `{ room }`                           | Join a chat room         |
-| `leave_room`   | `{ room }`                           | Leave a chat room        |
-| `send_message` | `{ room, content }`                  | Send a message           |
-| `typing_start` | `{ room, username }`                 | Start typing indicator   |
-| `typing_stop`  | `{ room }`                           | Stop typing indicator    |
-| `ping`         | `{}`                                 | Keep-alive ping          |
+| Event          | Description            |
+| -------------- | ---------------------- |
+| `join_room`    | Join a chat room       |
+| `leave_room`   | Leave a chat room      |
+| `send_message` | Send a message         |
+| `typing_start` | Start typing indicator |
+| `typing_stop`  | Stop typing indicator  |
+
+---
 
 ### Server → Client
 
-| Event          | Payload                              | Description              |
-|----------------|--------------------------------------|--------------------------|
-| `room_joined`  | `{ room, onlineUsers }`              | Confirmed room join      |
-| `new_message`  | `{ message }`                        | New message received     |
-| `typing_start` | `{ userId, username }`               | User started typing      |
-| `typing_stop`  | `{ userId }`                         | User stopped typing      |
-| `user_joined`  | `{ userId, room }`                   | User joined room         |
-| `user_left`    | `{ userId, room }`                   | User left room           |
-| `user_status`  | `{ userId, status }`                 | Status change broadcast  |
-| `error`        | `{ message }`                        | Error notification       |
+| Event          | Description             |
+| -------------- | ----------------------- |
+| `room_joined`  | Confirmed room join     |
+| `new_message`  | New message received    |
+| `typing_start` | User started typing     |
+| `typing_stop`  | User stopped typing     |
+| `user_status`  | Status change broadcast |
 
 ---
 
 ## 📡 REST API Endpoints
 
 ### Auth
+
 ```
-POST   /api/auth/register     — Register user
-POST   /api/auth/login        — Login user
-GET    /api/auth/me           — Get current user (protected)
-POST   /api/auth/logout       — Logout (protected)
+POST   /api/auth/register
+POST   /api/auth/login
+GET    /api/auth/me
 ```
 
 ### Messages
+
 ```
-GET    /api/messages/:room    — Get paginated messages (protected)
-DELETE /api/messages/:id      — Soft-delete message (protected)
+GET    /api/messages/:room
 ```
 
 ### Rooms
+
 ```
-GET    /api/rooms             — List all public rooms (protected)
-POST   /api/rooms             — Create room (protected)
-POST   /api/rooms/:id/join    — Join room (protected)
+GET    /api/rooms
+POST   /api/rooms
 ```
-
-### Users
-```
-GET    /api/users             — List all users (protected)
-GET    /api/users/:id         — Get user by ID (protected)
-PUT    /api/users/profile     — Update profile (protected)
-```
-
----
-
-## 🗄 Database Indexes
-
-Compound indexes are created on the Message collection for optimal query performance:
-
-```js
-{ room: 1, createdAt: -1 }   // Primary: room messages sorted by time
-{ sender: 1 }                 // User message lookups
-{ createdAt: -1 }             // Time-based queries
-{ room: 1, sender: 1 }        // Room + sender filtering
-```
-
-These indexes result in **~30% improvement** in message retrieval for high-volume rooms.
 
 ---
 
 ## 🏗 Architecture Highlights
 
-### Concurrent Connection Management
-Each user can have **multiple simultaneous WebSocket connections** (e.g., multiple browser tabs). The server maintains a `Map<userId, Set<WebSocket>>` structure to broadcast messages to all of a user's active connections.
-
-### Event-Driven Node.js
-The WebSocket server is built on Node.js's non-blocking I/O. Room membership is tracked in-memory using `Map<room, Set<userId>>` for O(1) lookups, while persistence is handled asynchronously via MongoDB.
-
-### JWT + WebSocket Auth
-WebSocket connections are authenticated by passing the JWT token as a query parameter during the handshake: `ws://localhost:5000/ws?token=<jwt>`. The server verifies it before accepting the connection.
-
-### Heartbeat / Reconnect
-- **Server**: Ping/pong heartbeat every 30s; terminates dead connections
-- **Client**: Auto-reconnects with 3s delay on unexpected disconnection
+* **Multi-tab support** using Map<userId, Set<WebSocket>>
+* **Event-driven WebSocket server**
+* **JWT authentication for HTTP + WebSocket**
+* **MongoDB Atlas for scalable cloud storage**
 
 ---
 
 ## 🚀 Production Deployment
 
-1. Set `NODE_ENV=production` and update `.env` with real `MONGODB_URI` and a strong `JWT_SECRET`
-2. Build the React app: `cd client && npm run build`
-3. Serve static files from Express: Add `app.use(express.static('../client/build'))` to `server/index.js`
-4. Use a process manager: `pm2 start server/index.js`
-5. Use MongoDB Atlas for managed cloud database
+* Use **MongoDB Atlas** for database
+* Deploy backend on **Render / Railway**
+* Deploy frontend on **Vercel / Netlify**
+* Use **PM2** for process management
 
 ---
 
-## 📄 License
+## 👨‍💻 Author
 
-MIT
+**Nagesh Kumar**
+
+---
+
+## ⭐ If you like this project
+
+Give it a star ⭐ on GitHub!
